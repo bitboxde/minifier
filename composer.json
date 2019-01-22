@@ -2,7 +2,7 @@
     "name": "bitboxde/minifier",
     "description": "CSS, JS and HTML-Minifier-Plugin for Craft 3",
     "type": "craft-plugin",
-    "version": "1.0.0-beta",
+    "version": "1.0.0-beta.1",
     "keywords": [
         "craft",
         "cms",
