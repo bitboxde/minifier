@@ -1,0 +1,50 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Minifier plugin for Craft CMS 3.x
+ *
+ * Minifier Settings.twig
+ *
+ * @author    bitbox GmbH & Co. KG
+ * @copyright Copyright (c) 2019 bitbox GmbH & Co. KG
+ * @link      https://www.bitbox.de
+ * @package   Minifier
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("bitboxde\\minifier\\assetbundles\\minifier\\MinifierAsset") %}
+
+{{ forms.textField({
+    label: 'CSS Base URL',
+    instructions: 'The base URL to the CSS-files. An absolute URL (“http://example.com/path/to/folder”) or protocol-relative URL (“//example.com/path/to/folder”) is recommended. It can begin with an alias, such as @web.',
+    id: 'cssUrl',
+    name: 'cssUrl',
+    value: settings['cssUrl']})
+}}
+
+{{ forms.textField({
+    label: 'CSS File System Path',
+    instructions: 'Where the minified CSS-Files will be stored. An absolute path (“/path/to/folder”) is recommended. It can begin with an alias, such as @webroot.',
+    id: 'cssPath',
+    name: 'cssPath',
+    value: settings['cssPath']})
+}}
+
+{{ forms.textField({
+    label: 'JS Base URL',
+    instructions: 'The base URL to the JS-files. An absolute URL (“http://example.com/path/to/folder”) or protocol-relative URL (“//example.com/path/to/folder”) is recommended. It can begin with an alias, such as @web.',
+    id: 'jsUrl',
+    name: 'jsUrl',
+    value: settings['jsUrl']})
+}}
+
+{{ forms.textField({
+    label: 'JS File System Path',
+    instructions: 'Where the minified JS-Files will be stored. An absolute path (“/path/to/folder”) is recommended. It can begin with an alias, such as @webroot.',
+    id: 'jsPath',
+    name: 'jsPath',
+    value: settings['jsPath']})
+}}
