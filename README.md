@@ -85,7 +85,7 @@ Both files will be combined and the options will be merged together.
     {% do minifier.view.registerCssFile('<path/to/css-file>', {media: 'print'}, 'all.css') %}
     {% do minifier.view.registerCssFile('<path/to/second-css-file>', {'data-test': 'test'}, 'all.css') %}
 
-Output `<link data-test="test" media="print" href="/css/min/3f48a421fe28e0958090cc0061dec077.css?c=1548336831" rel="stylesheet">`
+Output `<link data-test="test" media="print" href="/css/min/all.css?c=1548336831" rel="stylesheet">`
 
 
 ## Minifier Roadmap
