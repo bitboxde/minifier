@@ -15,7 +15,7 @@ class JS extends \MatthiasMullie\Minify\JS
     }
 
     public function addOptions($options) {
-        $this->options = array_merge_recursive($this->options, $options);
+        $this->options = array_replace_recursive($this->options, $options);
 
         return $this;
     }
@@ -28,21 +28,24 @@ class JS extends \MatthiasMullie\Minify\JS
         if(!$path) {
             $path = $this->getTargetFile();
 
-            if(strpos($path, 'md5') !== false) {
+            if(isset($this->options['hash']) && $this->options['hash']) {
                 $path = md5(implode(',', array_keys($this->data))) . '.js';
+                unset($this->options['hash']);
             }
         }
 
         $doMinify = false;
         $targetFilePath = $storePath . '/' . $path;
+        $paramTime = time();
 
         if(file_exists($targetFilePath)) {
-            $targetMTime = filemtime($targetFilePath);
+            $paramTime = $targetMTime = filemtime($targetFilePath);
 
             foreach ($this->data as $filePath => $fileContent) {
                 $fileMTime = filemtime($filePath);
                 if($fileMTime && $fileMTime > $targetMTime) {
                     $doMinify = true;
+                    $paramTime = time();
                     break;
                 }
             }
@@ -50,7 +53,7 @@ class JS extends \MatthiasMullie\Minify\JS
             $doMinify = true;
         }
 
-        \Craft::$app->getView()->registerJsFile($registerUrl . '/' . $path, $this->options);
+        \Craft::$app->getView()->registerJsFile($registerUrl . '/' . $path . '?c=' . $paramTime, $this->options);
 
         if($doMinify) {
             return parent::minify($targetFilePath);

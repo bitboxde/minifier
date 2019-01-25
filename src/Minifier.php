@@ -71,8 +71,8 @@ class Minifier extends Plugin
             View::class,
             View::EVENT_AFTER_RENDER_TEMPLATE,
             function(Event $event) {
-                Minifier::getInstance()->view->minifyCSS();
-                Minifier::getInstance()->view->minifyJS();
+                Minifier::getInstance()->view->minifyCss();
+                Minifier::getInstance()->view->minifyJs();
             }
         );
 

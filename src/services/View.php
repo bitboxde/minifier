@@ -2,6 +2,7 @@
 namespace bitboxde\minifier\services;
 
 
+use bitboxde\minifier\Minifier;
 use bitboxde\minifier\minify\CSS;
 use bitboxde\minifier\minify\JS;
 use craft\base\Component;
@@ -23,67 +24,46 @@ class View extends Component
     /** @var bool User logged in as Admin or is devMode */
     protected $doMinify = false;
 
-    /** @var bool set in general-config */
-    protected $forceMinify = false;
-
     public function init()
     {
         parent::init();
 
-        if(isset(\Craft::$app->getConfig()->getGeneral()->forceMinify)) {
-            $this->forceMinify = \Craft::$app->getConfig()->getGeneral()->forceMinify;
-        }
-
         $this->doMinify = $this->doMinify();
     }
 
-    public function registerCssFile($url, $targetFile = null, $options = []) {
+    public function registerCssFile($url, $options = [], $targetFile = null) {
+        return $this->addFile('Css', $url, $options, $targetFile);
+    }
+
+    public function registerJsFile($url, $options = [], $targetFile = null) {
+        return $this->addFile('Js', $url, $options, $targetFile);
+    }
+
+    protected function addFile($type, $url, $options = [], $targetFile = null) {
+        $registerMethod = sprintf('register%sFile', $type);
+
         if($this->doMinify && $this->canMinifyFile($url)) {
             if(!$targetFile) {
-                $targetFile = 'md5';
+                $options['hash'] = true;
+                ksort($options);
+                $targetFile = md5('hash-' . implode('-', $options));
             }
             $rootAlias = \Yii::getRootAlias($url);
             $url = \Yii::getAlias($url);
 
             if(!file_exists($url) && !$rootAlias) {
-                return $this->registerCssFile('@webroot' . '/' . $url, $targetFile, $options);
+                return $this->$registerMethod('@webroot' . '/' . $url, $targetFile, $options);
             }
 
-            $cssMinifier = $this->getCSSMinifier($targetFile);
+            $getMinifierMethod = sprintf('get%sMinifier', $type);
+
+            /** @var CSS|JS $cssMinifier */
+            $cssMinifier = $this->$getMinifierMethod($targetFile);
             $cssMinifier->add($url);
             $cssMinifier->addOptions($options);
         } else {
-            \Craft::$app->getView()->registerCssFile($url, $options, $targetFile);
+            \Craft::$app->getView()->$registerMethod($url, $options, $targetFile);
         }
-
-        return $this;
-    }
-
-    public function registerJsFile($url, $targetFile = null, $options = []) {
-        if($this->doMinify && $this->canMinifyFile($url)) {
-            if(!$targetFile) {
-                $targetFile = 'md5';
-            }
-
-            $position = ArrayHelper::getValue($options, 'position', \craft\web\View::POS_END);
-
-            $targetFile .= '-' . $position;
-
-            $rootAlias = \Yii::getRootAlias($url);
-            $url = \Yii::getAlias($url);
-
-            if(!file_exists($url) && !$rootAlias) {
-                return $this->registerJsFile('@webroot' . '/' . $url, $targetFile, $options);
-            }
-
-            $jsMinifier = $this->getJSMinifier($targetFile);
-            $jsMinifier->add($url);
-            $jsMinifier->addOptions($options);
-        } else {
-            \Craft::$app->getView()->registerJsFile($url, $options, $targetFile);
-        }
-
-
 
         return $this;
     }
@@ -93,7 +73,7 @@ class View extends Component
      *
      * @return CSS
      */
-    public function getCSSMinifier($targetFile) {
+    public function getCssMinifier($targetFile) {
         if(!isset($this->cssMinifier[$targetFile])) {
             $this->cssMinifier[$targetFile] = new CSS();
             $this->cssMinifier[$targetFile]->setTargetFile($targetFile);
@@ -107,7 +87,7 @@ class View extends Component
      *
      * @return JS
      */
-    public function getJSMinifier($targetFile) {
+    public function getJsMinifier($targetFile) {
         if(!isset($this->jsMinifier[$targetFile])) {
             $this->jsMinifier[$targetFile] = new JS();
             $this->jsMinifier[$targetFile]->setTargetFile($targetFile);
@@ -116,15 +96,17 @@ class View extends Component
         return $this->jsMinifier[$targetFile];
     }
 
-    public function minifyCSS() {
-        foreach($this->cssMinifier as $cssMinify) {
+    public function minifyCss() {
+        foreach($this->cssMinifier as $key => &$cssMinify) {
             $cssMinify->minify();
+            unset($this->cssMinifier[$key]);
         }
     }
 
-    public function minifyJS() {
-        foreach($this->jsMinifier as $jsMinify) {
+    public function minifyJs() {
+        foreach($this->jsMinifier as $key => $jsMinify) {
             $jsMinify->minify();
+            unset($this->jsMinifier[$key]);
         }
     }
 
@@ -143,6 +125,10 @@ class View extends Component
     }
 
     public function doMinify() {
-        return $this->forceMinify || (!\Craft::$app->getUser()->getIsAdmin() && !\Craft::$app->getConfig()->getGeneral()->devMode);
+        if (Minifier::getInstance()->getSettings()->disableAdmin && \Craft::$app->getUser()->getIsAdmin()) {
+            return false;
+        }
+
+        return !\Craft::$app->getConfig()->getGeneral()->devMode;
     }
 }
