@@ -33,6 +33,7 @@ class Settings extends Model
     public $cssUrl = '@web/css/min';
     public $jsUrl = '@web/js/min';
     public $disableAdmin = false;
+    public $enableDevMode = true;
 
     // Public Methods
     // =========================================================================
@@ -46,7 +47,7 @@ class Settings extends Model
             [['cssPath', 'jsPath', 'cssUrl', 'jsUrl'], 'required'],
             [['cssPath', 'jsPath', 'cssUrl', 'jsUrl'], 'string'],
             [['cssPath', 'jsPath', 'cssUrl', 'jsUrl'], 'default', 'value' => 'CSS Path'],
-            [['disableAdmin'], 'boolean'],
+            [['disableAdmin', 'enableDevMode'], 'boolean'],
         ];
     }
 
@@ -55,5 +56,6 @@ class Settings extends Model
         parent::afterValidate();
 
         $this->disableAdmin = boolval($this->disableAdmin);
+        $this->enableDevMode = boolval($this->enableDevMode);
     }
 }

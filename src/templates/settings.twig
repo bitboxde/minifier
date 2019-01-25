@@ -17,6 +17,8 @@
 
 {% do view.registerAssetBundle("bitboxde\\minifier\\assetbundles\\minifier\\MinifierAsset") %}
 
+<h2>Debuggin</h2>
+
 {{ forms.lightswitchField({
     label: 'Disable for "Admin"',
     instructions: 'The files will be minified if you are NOT in devMode. With this setting you can disable the minifying in devMode, if you are logged in as an "Admin"-User',
@@ -25,6 +27,17 @@
     on: settings['disableAdmin']
     })
 }}
+
+{{ forms.lightswitchField({
+    label: 'Enable for devMode',
+    instructions: 'Activate, to minify the files in devMode.',
+    id: 'enableDevMode',
+    name: 'enableDevMode',
+    on: settings['enableDevMode']
+})
+}}
+
+<h2>Paths</h2>
 
 {{ forms.textField({
     label: 'CSS Base URL',
