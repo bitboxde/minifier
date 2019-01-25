@@ -17,6 +17,15 @@
 
 {% do view.registerAssetBundle("bitboxde\\minifier\\assetbundles\\minifier\\MinifierAsset") %}
 
+{{ forms.lightswitchField({
+    label: 'Disable for "Admin"',
+    instructions: 'The files will be minified if you are NOT in devMode. With this setting you can disable the minifying in devMode, if you are logged in as an "Admin"-User',
+    id: 'disableAdmin',
+    name: 'disableAdmin',
+    on: settings['disableAdmin']
+    })
+}}
+
 {{ forms.textField({
     label: 'CSS Base URL',
     instructions: 'The base URL to the CSS-files. An absolute URL (“http://example.com/path/to/folder”) or protocol-relative URL (“//example.com/path/to/folder”) is recommended. It can begin with an alias, such as @web.',

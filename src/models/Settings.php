@@ -32,6 +32,7 @@ class Settings extends Model
     public $jsPath = '@webroot/js/min';
     public $cssUrl = '@web/css/min';
     public $jsUrl = '@web/js/min';
+    public $disableAdmin = false;
 
     // Public Methods
     // =========================================================================
@@ -45,6 +46,14 @@ class Settings extends Model
             [['cssPath', 'jsPath', 'cssUrl', 'jsUrl'], 'required'],
             [['cssPath', 'jsPath', 'cssUrl', 'jsUrl'], 'string'],
             [['cssPath', 'jsPath', 'cssUrl', 'jsUrl'], 'default', 'value' => 'CSS Path'],
+            [['disableAdmin'], 'boolean'],
         ];
+    }
+
+    public function afterValidate()
+    {
+        parent::afterValidate();
+
+        $this->disableAdmin = boolval($this->disableAdmin);
     }
 }
