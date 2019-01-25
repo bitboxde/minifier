@@ -2,6 +2,7 @@
 namespace bitboxde\minifier\minify;
 
 use bitboxde\minifier\Minifier;
+use Symfony\Component\Filesystem\Filesystem;
 
 class CSS extends \MatthiasMullie\Minify\CSS
 {
@@ -32,6 +33,11 @@ class CSS extends \MatthiasMullie\Minify\CSS
                 $path = md5(implode(',', array_keys($this->data))) . '.css';
                 unset($this->options['hash']);
             }
+        }
+
+        $fs = new Filesystem();
+        if(!$fs->exists($storePath)) {
+            $fs->mkdir($storePath, 0776);
         }
 
         $doMinify = false;

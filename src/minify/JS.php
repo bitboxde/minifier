@@ -2,6 +2,7 @@
 namespace bitboxde\minifier\minify;
 
 use bitboxde\minifier\Minifier;
+use Symfony\Component\Filesystem\Filesystem;
 
 class JS extends \MatthiasMullie\Minify\JS
 {
@@ -32,6 +33,11 @@ class JS extends \MatthiasMullie\Minify\JS
                 $path = md5(implode(',', array_keys($this->data))) . '.js';
                 unset($this->options['hash']);
             }
+        }
+
+        $fs = new Filesystem();
+        if(!$fs->exists($storePath)) {
+            $fs->mkdir($storePath, 0776);
         }
 
         $doMinify = false;
