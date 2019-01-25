@@ -14,5 +14,5 @@
  * @since     1.0.0
  */
 return [
-    'Minifier plugin loaded' => 'Minifier plugin loaded',
+
 ];

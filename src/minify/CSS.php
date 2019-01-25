@@ -37,7 +37,7 @@ class CSS extends \MatthiasMullie\Minify\CSS
 
         $fs = new Filesystem();
         if(!$fs->exists($storePath)) {
-            $fs->mkdir($storePath, 0776);
+            $fs->mkdir($storePath, 0755);
         }
 
         $doMinify = false;
