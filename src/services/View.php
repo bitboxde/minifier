@@ -42,17 +42,20 @@ class View extends Component
     protected function addFile($type, $url, $options = [], $targetFile = null) {
         $registerMethod = sprintf('register%sFile', $type);
 
+        $url = str_replace('//', '/', $url);
+
         if($this->doMinify && $this->canMinifyFile($url)) {
-            if(!$targetFile) {
-                $options['hash'] = true;
-                ksort($options);
-                $targetFile = md5('hash-' . implode('-', $options));
-            }
             $rootAlias = \Yii::getRootAlias($url);
             $url = \Yii::getAlias($url);
 
             if(!file_exists($url) && !$rootAlias) {
-                return $this->$registerMethod('@webroot' . '/' . $url, $targetFile, $options);
+                return $this->$registerMethod('@webroot' . '/' . $url, $options, $targetFile);
+            }
+
+            if(!$targetFile) {
+                $options['hash'] = true;
+                ksort($options);
+                $targetFile = md5('hash-' . implode('-', $options));
             }
 
             $getMinifierMethod = sprintf('get%sMinifier', $type);
@@ -127,6 +130,10 @@ class View extends Component
     public function doMinify() {
         if (Minifier::getInstance()->getSettings()->disableAdmin && \Craft::$app->getUser()->getIsAdmin()) {
             return false;
+        }
+
+        if(Minifier::getInstance()->getSettings()->enableDevMode && \Craft::$app->getConfig()->getGeneral()->devMode) {
+            return true;
         }
 
         return !\Craft::$app->getConfig()->getGeneral()->devMode;
