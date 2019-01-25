@@ -10,6 +10,12 @@ This plugin requires Craft CMS 3.0.0-beta.23 or later.
 
 ## Installation
 
+### Plugin Store (the easy way)
+- In the Craft Control Panel, go to Settings -> Plugins
+- Search for "Minifier"
+- Click the "Install" button
+
+### Composer Command Line (the manual way)
 To install the plugin, follow these instructions.
 
 1. Open your terminal and go to your Craft project:
