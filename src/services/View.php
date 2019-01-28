@@ -46,10 +46,11 @@ class View extends Component
 
         if($this->doMinify && $this->canMinifyFile($url)) {
             $rootAlias = \Yii::getRootAlias($url);
+            $originUrl = $url;
             $url = \Yii::getAlias($url);
 
             if(!file_exists($url) && !$rootAlias) {
-                return $this->$registerMethod('@webroot' . '/' . $url, $options, $targetFile);
+                return $this->$registerMethod('@webroot' . '/' . $originUrl, $options, $targetFile);
             }
 
             if(!$targetFile) {
@@ -100,7 +101,7 @@ class View extends Component
     }
 
     public function minifyCss() {
-        foreach($this->cssMinifier as $key => &$cssMinify) {
+        foreach($this->cssMinifier as $key => $cssMinify) {
             $cssMinify->minify();
             unset($this->cssMinifier[$key]);
         }
