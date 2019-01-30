@@ -7,6 +7,7 @@ use bitboxde\minifier\minify\CSS;
 use bitboxde\minifier\minify\JS;
 use craft\base\Component;
 use craft\helpers\ArrayHelper;
+use yii\base\Exception;
 
 class View extends Component
 {
@@ -45,26 +46,31 @@ class View extends Component
         $url = str_replace('//', '/', $url);
 
         if($this->doMinify && $this->canMinifyFile($url)) {
-            $rootAlias = \Yii::getRootAlias($url);
             $originUrl = $url;
             $url = \Yii::getAlias($url);
 
-            if(!file_exists($url) && !$rootAlias) {
-                return $this->$registerMethod('@webroot' . '/' . $originUrl, $options, $targetFile);
+            if(file_exists($url)) {
+                if(!$targetFile) {
+                    $options['hash'] = true;
+                    ksort($options);
+                    $targetFile = md5('hash-' . implode('-', $options));
+                }
+
+                $getMinifierMethod = sprintf('get%sMinifier', $type);
+
+                /** @var CSS|JS $cssMinifier */
+                $cssMinifier = $this->$getMinifierMethod($targetFile);
+                $cssMinifier->add($url);
+                $cssMinifier->addOptions($options);
+            } else {
+                if(!\Yii::getRootAlias($originUrl)) {
+                    if(!$this->$registerMethod('@webroot' . '/' . $originUrl, $options, $targetFile)) {
+                        throw new Exception(sprintf('The file "%s" does not exist.', $originUrl));
+                    }
+                } else {
+                    return false;
+                }
             }
-
-            if(!$targetFile) {
-                $options['hash'] = true;
-                ksort($options);
-                $targetFile = md5('hash-' . implode('-', $options));
-            }
-
-            $getMinifierMethod = sprintf('get%sMinifier', $type);
-
-            /** @var CSS|JS $cssMinifier */
-            $cssMinifier = $this->$getMinifierMethod($targetFile);
-            $cssMinifier->add($url);
-            $cssMinifier->addOptions($options);
         } else {
             \Craft::$app->getView()->$registerMethod($url, $options, $targetFile);
         }
