@@ -11,8 +11,10 @@
         "minifier"
     ],
     "support": {
-        "docs": "???",
-        "issues": "???"
+        "email": "technik@bitbox.de",
+        "docs": "https://github.com/bitboxde/minifier/blob/master/README.md",
+        "issues": "https://github.com/bitboxde/minifier/issues?q=is%3Aopen",
+        "source": "https://github.com/bitboxde/minifier"
     },
     "license": "MIT",
     "authors": [
@@ -36,7 +38,7 @@
         "handle": "minifier",
         "hasCpSettings": true,
         "hasCpSection": false,
-        "changelogUrl": "???",
+        "changelogUrl": "https://github.com/bitboxde/minifier/blob/master/CHANGELOG.md",
         "class": "bitboxde\\minifier\\Minifier"
     }
 }
