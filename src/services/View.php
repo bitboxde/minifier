@@ -72,16 +72,18 @@ class View extends Component
                 }
             }
         } else {
-            $path = '';
+            $alias = \Craft::getRootAlias($url);
+            if($alias) {
+                $path = '';
 
-            if($type === 'Js') {
-                $path = \Craft::getAlias(Minifier::getInstance()->getSettings()->jsPath);
-            } elseif($type === 'Css') {
-                $path = \Craft::getAlias(Minifier::getInstance()->getSettings()->cssPath);
+                if($type === 'Js') {
+                    $path = Minifier::getInstance()->getSettings()->jsUrl;
+                } elseif($type === 'Css') {
+                    $path = Minifier::getInstance()->getSettings()->cssUrl;
+                }
+
+                $url = str_replace($alias, \Craft::getRootAlias($path), $url);
             }
-
-            $alias = \Craft::getAlias($url);
-            $url = str_replace($alias, \Craft::getAlias($path), $url);
 
 
             \Craft::$app->getView()->$registerMethod($url, $options, $targetFile);
