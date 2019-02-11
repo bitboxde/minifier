@@ -43,9 +43,9 @@ class View extends Component
     protected function addFile($type, $url, $options = [], $targetFile = null) {
         $registerMethod = sprintf('register%sFile', $type);
 
-        $url = str_replace('//', '/', $url);
-
         if($this->doMinify && $this->canMinifyFile($url)) {
+            $url = str_replace('//', '/', $url);
+
             $originUrl = $url;
             $url = \Yii::getAlias($url);
 
@@ -72,6 +72,18 @@ class View extends Component
                 }
             }
         } else {
+            $path = '';
+
+            if($type === 'Js') {
+                $path = \Craft::getAlias(Minifier::getInstance()->getSettings()->jsPath);
+            } elseif($type === 'Css') {
+                $path = \Craft::getAlias(Minifier::getInstance()->getSettings()->cssPath);
+            }
+
+            $alias = \Craft::getAlias($url);
+            $url = str_replace($alias, \Craft::getAlias($path), $url);
+
+
             \Craft::$app->getView()->$registerMethod($url, $options, $targetFile);
         }
 
