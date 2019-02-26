@@ -10,10 +10,12 @@
 
 namespace bitboxde\minifier;
 
+use bitboxde\minifier\events\ViewEvent;
 use bitboxde\minifier\minify\CSS;
 use bitboxde\minifier\minify\JS;
 use bitboxde\minifier\models\Settings;
 
+use bitboxde\minifier\services\Config;
 use bitboxde\minifier\twigextensions\Extension;
 use bitboxde\minifier\twigextensions\MinifierTwigExtension;
 use Craft;
@@ -28,13 +30,12 @@ use yii\base\Event;
 
 /**
  * Class Minifier
- *
  * @author    bitbox GmbH & Co. KG
  * @package   Minifier
  * @since     1.0.0
- *
  * @property  \bitboxde\minifier\services\View $view
- *
+ * @property  \bitboxde\minifier\services\Config $config
+ * @method Settings getSettings()
  */
 class Minifier extends Plugin
 {
@@ -45,6 +46,7 @@ class Minifier extends Plugin
      * @var Minifier
      */
     public static $plugin;
+    public static $defaultConfig;
 
     // Public Properties
     // =========================================================================
@@ -65,16 +67,30 @@ class Minifier extends Plugin
         parent::init();
         self::$plugin = $this;
 
-        Craft::$app->view->registerTwigExtension(new Extension());
+        Craft::$app->getView()->registerTwigExtension(new Extension());
 
         Event::on(
             View::class,
             View::EVENT_AFTER_RENDER_TEMPLATE,
             function(Event $event) {
-                Minifier::getInstance()->view->minifyCss();
-                Minifier::getInstance()->view->minifyJs();
+                Minifier::getInstance()->view->minify('css');
+                Minifier::getInstance()->view->minify('js');
             }
         );
+
+//        Event::on(
+//            \bitboxde\minifier\services\View::class,
+//            \bitboxde\minifier\services\View::EVENT_BEFORE_MINIFY_FILE,
+//            function(ViewEvent $event) {
+//                $pathinfo = pathinfo($event->filePath);
+//                $ext = $pathinfo['extension'];
+//
+//                if($ext === 'less') {
+//                    $parser = new \lessc();
+//                    $event->output = $parser->compileFile($event->filePath);
+//                }
+//            }
+//        );
 
         Event::on(
             CraftVariable::class,
@@ -104,6 +120,7 @@ class Minifier extends Plugin
 
         $this->setComponents([
             'view'      => \bitboxde\minifier\services\View::class,
+            'config'    => Config::class
         ]);
     }
 
@@ -129,5 +146,42 @@ class Minifier extends Plugin
                 'settings' => $this->getSettings(),
             ]
         );
+    }
+
+    public static function parseEnv(string $str = null) {
+        if(method_exists(Craft::class, 'parseEnv')) {
+            return Craft::parseEnv($str);
+        }
+
+        return Craft::getAlias($str);
+    }
+
+    /**
+     * Returns only an alias or an enviroment variable. If there neither of them, it return false.
+     *
+     * @param $str
+     *
+     * @return bool|false|string
+     */
+    public static function getRootEnv($str) {
+        if (preg_match('/^\$(\w+)$/', $str, $matches)) {
+            return getenv($matches[1]);
+        }
+
+        return \Craft::getRootAlias($str);
+    }
+
+    /**
+     * @return services\View
+     */
+    public static function getView() {
+        return Minifier::getInstance()->view;
+    }
+
+    /**
+     * @return Config|mixed
+     */
+    public static function getConfig() {
+        return Minifier::getInstance()->config;
     }
 }

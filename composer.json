@@ -2,7 +2,7 @@
     "name": "bitboxde/minifier",
     "description": "CSS, JS and HTML-Minifier-Plugin for Craft 3",
     "type": "craft-plugin",
-    "version": "1.0.2",
+    "version": "2.0.0",
     "keywords": [
         "craft",
         "cms",
@@ -12,7 +12,7 @@
     ],
     "support": {
         "email": "technik@bitbox.de",
-        "docs": "https://github.com/bitboxde/minifier/blob/master/README.md",
+        "docs": "https://github.com/bitboxde/minifier/blob/master/docs/README.md",
         "issues": "https://github.com/bitboxde/minifier/issues?q=is%3Aopen",
         "source": "https://github.com/bitboxde/minifier"
     },

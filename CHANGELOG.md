@@ -1,5 +1,22 @@
 # Minifier Changelog
 
+## 2.0.0 - 2019-02-26 [ATTENTION]
+:warning: Did you use a previous version (< 2.0.0), please see the **changed** log! There are a few
+minor adjustments necessary in your project. But with these changes we are more flexible and more stable.
+
+### Changed
+- Base Path and Base URL usage. It's not the target min-directory any more, instead it's the default source directory.
+  Have a look at the [documentation](https://github.com/bitboxde/minifier/blob/master/docs/README.md) for some examples.
+
+### Added
+- Performance improvement
+- Events
+- CSS preprocessor (less/Sass) solution via events
+- More flexible options by registering files
+- More configuration possibilities
+- Using autosuggest field in Plugin Settings (since Craft CMS Version 3.1)
+- Better documentation
+
 ## 1.0.2 - 2019-02-11
 ### Fixed
 - Fixed a bug that crept in fixing another bug in Version 1.0.1 ([#2](https://github.com/bitboxde/minifier/issues/2))

@@ -1,6 +1,6 @@
 # Minifier plugin for Craft CMS 3.x
 
-Minifier for CSS- and JavaScript-Files.
+Minifier for CSS and JavaScript files.
 
 ![Screenshot](resources/img/plugin-logo.png)
 
@@ -34,83 +34,21 @@ To install the plugin, follow these instructions.
 
 ![Screenshot](resources/img/screenshot-settings.png)
 
-## Using Minifier
+## Documentation
 
-To register files, just do the following in Twig:
+ - **[Installation](docs/installation.md)**
+ - **[Settings](docs/settings.md)** /  **[Advanced](docs/settings.md#advanced)**
+ - **[Register files](docs/register-files.md)** / **[Advanced](docs/register-files.md#advanced)**
+ - **[Multi-Site usage](docs/multi-site-usage.md)**
+ - **[Events](docs/events.md)**
+ - **[Integrate a CSS preprocessor (Sass / Less)](docs/integrate-a-css-preprocessor.md)**
 
-### CSS-File
 
-#### Simple
-
-The `@<alias>` is a Craft-alias, such as `@webroot`. It's also possible without the alias, then there is a fallback to `@webroot`, cause the minifier needs the absolute server path.
-
-    {% do minifier.view.registerCssFile('<@alias>/<path/to/css-file>') %}
-
-Output: `<link href="/css/min/3f48a421fe28e0958090cc0061dec077.css?c=1548336831" rel="stylesheet">`
-
-##### With options
-    {% do minifier.view.registerCssFile('<@alias>/<path/to/css-file>', {media: 'print'}) %}
-        
-Output: `<link media="print" href="/css/min/3f48a421fe28e0958090cc0061dec077.css?c=1548336831" rel="stylesheet">`
-        
-##### With Options and Target File
-    {% do minifier.view.registerCssFile('<@alias>/<path/to/css-file>', {media: 'print'}, 'print.css') %}
-        
-Output: `<link media="print" href="/css/min/print.css?c=1548336831" rel="stylesheet">`
-        
-
-#### Advanced
-
-##### Multiple files
-Both files will be combined.
-
-    {% do minifier.view.registerCssFile('<@alias>/<path/to/css-file>') %}
-    {% do minifier.view.registerCssFile('<@alias>/<path/to/second-css-file>') %}
-
-Output: `<link href="/css/min/3f48a421fe28e0958090cc0061dec077.css?c=1548336831" rel="stylesheet">`
-
-##### With same options
-Both files will be combined.
-        
-    {% do minifier.view.registerCssFile('<@alias>/<path/to/css-file>', {media: 'print'}) %}
-    {% do minifier.view.registerCssFile('<@alias>/<path/to/second-css-file>', {media: 'print'}) %}
-
-Output `<link media="print" href="/css/min/3f48a421fe28e0958090cc0061dec077.css?c=1548336831" rel="stylesheet">`
-
-##### With differenct options
-Both files will be minified in a separate file.
-        
-    {% do minifier.view.registerCssFile('<@alias>/<path/to/css-file>', {media: 'print'}) %}
-    {% do minifier.view.registerCssFile('<@alias>/<path/to/second-css-file>') %}
-
-Output
-
-`<link media="print" href="/css/min/3f48a421fe28e0958090cc0061dec077.css?c=1548336831" rel="stylesheet">`
-
-`<link href="/css/min/e4cf6efeb8b84ecd5eab28cea274c696.css?c=1548336831" rel="stylesheet">`
-
-##### With differenct options and Target File
-Both files will be combined and the options will be merged together.
-        
-    {% do minifier.view.registerCssFile('<@alias>/<path/to/css-file>', {media: 'print'}, 'all.css') %}
-    {% do minifier.view.registerCssFile('<@alias>/<path/to/second-css-file>', {'data-test': 'test'}, 'all.css') %}
-
-Output `<link data-test="test" media="print" href="/css/min/all.css?c=1548336831" rel="stylesheet">`
-
-### JS-File
-
-It's the same way like the CSS-File, just with an other method call.
-
-    {% do minifier.view.registerJsFile('<@alias>/<path/to/js-file>', <options>, <targetfile>) %}
-
-Output: `<script src="/js/min/3f48a421fe28e0958090cc0061dec077.js?c=1548336831"></script>`
 
 ## Minifier Roadmap
 
 Some things to do, and ideas for potential features:
 
-* More settings/options
-  * save minified files in different folders (overwriting the plugin-settings)
 * External files
 * HTML-Minifier (currently beta)
 
