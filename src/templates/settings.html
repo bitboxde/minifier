@@ -1,0 +1,93 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Minifier plugin for Craft CMS 3.x
+ *
+ * Minifier Settings.twig
+ *
+ * @author    bitbox GmbH & Co. KG
+ * @copyright Copyright (c) 2019 bitbox GmbH & Co. KG
+ * @link      https://www.bitbox.de
+ * @package   Minifier
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+{% import "minifier/_includes/forms" as minifier_forms %}
+
+{% do view.registerAssetBundle("bitboxde\\minifier\\assetbundles\\minifier\\MinifierAsset") %}
+
+<h2>Debugging</h2>
+
+{{ forms.lightswitchField({
+    label: 'Disable for "Admin"',
+    instructions: 'The files will be minified if you are NOT in devMode. With this setting you can disable the minifying in devMode, if you are logged in as an "Admin"-User',
+    id: 'disableAdmin',
+    name: 'disableAdmin',
+    on: settings['disableAdmin']
+    })
+}}
+
+{{ forms.lightswitchField({
+    label: 'Enable for devMode',
+    instructions: 'Activate, to minify the files in devMode.',
+    id: 'enableDevMode',
+    name: 'enableDevMode',
+    on: settings['enableDevMode']
+})
+}}
+
+<h2>Paths</h2>
+
+{{ minifier_forms.autosuggestField({
+    label: "CSS Base URL"|t('app'),
+    instructions: "The base URL to the CSS files."|t('app'),
+    id: 'cssUrl',
+    class: 'ltr volume-url',
+    name: 'cssUrl',
+    suggestEnvVars: true,
+    suggestAliases: true,
+    value: (settings['cssUrl'] is defined ? settings['cssUrl'] : null),
+    errors: (settings is defined ? settings.getErrors('cssUrl') : null),
+    required: true
+}) }}
+
+{{ minifier_forms.autosuggestField({
+    label: "CSS File System Path"|t('app'),
+    instructions: "The path to the CSS directory on the file system, where the minified CSS files will be stored."|t('app'),
+    id: 'cssPath',
+    class: 'ltr volume-url',
+    name: 'cssPath',
+    suggestEnvVars: true,
+    suggestAliases: true,
+    value: (settings['cssPath'] is defined ? settings['cssPath'] : null),
+    errors: (settings is defined ? settings.getErrors('cssPath') : null),
+    required: true
+}) }}
+
+{{ minifier_forms.autosuggestField({
+    label: "JS Base URL"|t('app'),
+    instructions: "The base URL to the JS files."|t('app'),
+    id: 'jsUrl',
+    class: 'ltr volume-url',
+    name: 'jsUrl',
+    suggestEnvVars: true,
+    suggestAliases: true,
+    value: (settings['jsUrl'] is defined ? settings['jsUrl'] : null),
+    errors: (settings is defined ? settings.getErrors('jsUrl') : null),
+    required: true
+}) }}
+
+{{ minifier_forms.autosuggestField({
+    label: "JS File System Path"|t('app'),
+    instructions: "The path to the JS directory on the file system, where the minified CSS files will be stored."|t('app'),
+    id: 'jsPath',
+    class: 'ltr volume-url',
+    name: 'jsPath',
+    suggestEnvVars: true,
+    suggestAliases: true,
+    value: (settings['jsPath'] is defined ? settings['jsPath'] : null),
+    errors: (settings is defined ? settings.getErrors('jsPath') : null),
+    required: true
+}) }}

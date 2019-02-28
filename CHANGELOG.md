@@ -1,5 +1,9 @@
 # Minifier Changelog
 
+## 2.0.1 - 2019-02-28 [CRITICAL]
+### Fixed
+- Some files and some methods were missing on the last commit ([#2](https://github.com/bitboxde/minifier/issues/3))
+
 ## 2.0.0 - 2019-02-26 [ATTENTION]
 :warning: Did you use a previous version (< 2.0.0), please see the **changed** log! There are a few
 minor adjustments necessary in your project. But with these changes we are more flexible and more stable.

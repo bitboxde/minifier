@@ -8,7 +8,7 @@ result in the output property of the ViewEvent.
     Event::on(
         \bitboxde\minifier\services\View::class,
         \bitboxde\minifier\services\View::EVENT_BEFORE_MINIFY_FILE,
-        function(ViewEvent $event) {
+        function(\bitboxde\minifier\events\ViewEvent $event) {
             $pathinfo = pathinfo($event->filePath);
             $ext = $pathinfo['extension'];
 
