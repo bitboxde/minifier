@@ -1,5 +1,9 @@
 # Minifier Changelog
 
+## 2.0.2 - 2019-08-20
+### Fixed
+- Fixed a bug that occured with autosuggest fields in Craft 3.2 ([#5](https://github.com/bitboxde/minifier/issues/5))
+
 ## 2.0.1 - 2019-02-28 [CRITICAL]
 ### Fixed
 - Some files and some methods were missing on the last commit ([#3](https://github.com/bitboxde/minifier/issues/3))
