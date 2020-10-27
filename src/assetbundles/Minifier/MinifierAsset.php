@@ -29,7 +29,7 @@ class MinifierAsset extends AssetBundle
      */
     public function init()
     {
-        $this->sourcePath = "@bitboxde/minifier/assetbundles/minifier/dist";
+        $this->sourcePath = "@bitboxde/minifier/assetbundles/Minifier/dist";
 
         $this->depends = [
             CpAsset::class,

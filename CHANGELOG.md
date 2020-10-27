@@ -1,5 +1,10 @@
 # Minifier Changelog
 
+## 2.0.5 - 2020-10-27
+### Fixed
+- Fixed CP asset loading issue
+
+
 ## 2.0.4 - 2020-10-27
 ### Fixed
 - Composer v2.0 compatibility ([#12](https://github.com/bitboxde/minifier/issues/12))
