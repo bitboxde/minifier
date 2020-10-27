@@ -1,5 +1,10 @@
 # Minifier Changelog
 
+## 2.0.4 - 2020-10-27
+### Fixed
+- Composer v2.0 compatibility ([#12](https://github.com/bitboxde/minifier/issues/12))
+
+
 ## 2.0.3 - 2019-08-20
 ### Fixed
 - Fixed another bug that occured with autosuggest fields in Craft 3.* ([#5](https://github.com/bitboxde/minifier/issues/5) [#6](https://github.com/bitboxde/minifier/issues/6))
