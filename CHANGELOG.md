@@ -1,14 +1,17 @@
 # Minifier Changelog
 
+## 3.0.0 - 2022-08-18
+### Changed
+- No changes to 2.0.5
+- Just for a better version control, from now we will go with Craft-Versions.
+
 ## 2.0.5 - 2020-10-27
 ### Fixed
 - Fixed CP asset loading issue
 
-
 ## 2.0.4 - 2020-10-27
 ### Fixed
 - Composer v2.0 compatibility ([#12](https://github.com/bitboxde/minifier/issues/12))
-
 
 ## 2.0.3 - 2019-08-20
 ### Fixed
