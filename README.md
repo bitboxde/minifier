@@ -1,4 +1,4 @@
-# Minifier plugin for Craft CMS 3.x
+# Minifier plugin for Craft CMS 4.x
 
 Minifier for CSS and JavaScript files.
 
@@ -6,7 +6,7 @@ Minifier for CSS and JavaScript files.
 
 ## Requirements
 
-This plugin requires Craft CMS 3.x
+This plugin requires Craft CMS 4.x
 
 ## Installation
 
