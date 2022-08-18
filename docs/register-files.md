@@ -40,6 +40,10 @@ Output
 
 Both files will be combined.
 
+    {% do minifier.view.registerCssFile(['/file.css', '/file2.css']) %}
+
+or
+
     {% do minifier.view.registerCssFile('/file.css') %}
     {% do minifier.view.registerCssFile('/file2.css') %}
 

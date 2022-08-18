@@ -5,6 +5,8 @@ namespace bitboxde\minifier\services;
 use bitboxde\minifier\events\ViewEvent;
 use bitboxde\minifier\Minifier;
 use craft\base\Component;
+use MatthiasMullie\Minify\CSS;
+use MatthiasMullie\Minify\JS;
 use Symfony\Component\Filesystem\Filesystem;
 use yii\base\Exception;
 
@@ -26,7 +28,7 @@ class View extends Component
      */
     protected $doMinify = false;
 
-    public function init()
+    public function init() :void
     {
         parent::init();
 
@@ -67,50 +69,56 @@ class View extends Component
      * @return $this
      * @throws Exception
      */
-    protected function addFile($type, $url, $options = [], $targetFile = null) {
+    protected function addFile($type, $urls, $options = [], $targetFile = null) {
         $type = strtolower($type);
 
         $options['targetFile'] = $targetFile;
         $options = $this->getFileOptions($type, $options);
 
-        if($this->doMinify && !$this->isExternalFile($url)) {
-            $url = Minifier::parseEnv($options['basePath'] . $url);
+        if(!is_array($urls)) {
+            $urls = [$urls];
+        }
 
-            if(file_exists($url)) {
+        foreach ($urls as $url) {
+            if($this->doMinify && !$this->isExternalFile($url)) {
+                $url = Minifier::parseEnv($options['basePath'] . $url);
 
-                if(!$options['targetFile']) {
-                    $options['hash'] = true;
-                    ksort($options);
-                    $options['targetFile'] = md5('hash-' . implode('-', $options));
-                }
+                if(file_exists($url)) {
 
-                $filesProperty = $type . 'Files';
-                $targetFilePath = $options['targetPath'] . '/' . $options['targetFile'];
+                    if(!$options['targetFile']) {
+                        $options['hash'] = true;
+                        ksort($options);
+                        $options['targetFile'] = md5('hash-' . implode('-', $options));
+                    }
 
-                if(!isset($this->$filesProperty[$targetFilePath])) {
-                    $this->$filesProperty[$targetFilePath] = array(
-                        'type'          => $type,
-                        'options'       => [],
-                        'files'         => []
+                    $filesProperty = $type . 'Files';
+                    $targetFilePath = $options['targetPath'] . '/' . $options['targetFile'];
+
+                    if(!isset($this->$filesProperty[$targetFilePath])) {
+                        $this->$filesProperty[$targetFilePath] = array(
+                            'type'          => $type,
+                            'options'       => [],
+                            'files'         => []
+                        );
+                    }
+
+                    $this->$filesProperty[$targetFilePath]['files'][] = $url;
+                    $this->$filesProperty[$targetFilePath]['options'] = array_replace_recursive(
+                        $this->$filesProperty[$targetFilePath]['options'],
+                        $options
                     );
+
+                } else {
+                    throw new Exception(sprintf('The file "%s" does not exist.', $url));
+                }
+            } else {
+                $registerMethod = sprintf('register%sFile', ucfirst($type));
+                if(!$this->isExternalFile($url)) {
+                    $url = Minifier::parseEnv($options['baseUrl'] . $url);
                 }
 
-                $this->$filesProperty[$targetFilePath]['files'][] = $url;
-                $this->$filesProperty[$targetFilePath]['options'] = array_replace_recursive(
-                    $this->$filesProperty[$targetFilePath]['options'],
-                    $options
-                );
-
-            } else {
-                throw new Exception(sprintf('The file "%s" does not exist.', $url));
+                \Craft::$app->getView()->$registerMethod($url, $this->getRegisterOptions($options), $targetFile);
             }
-        } else {
-            $registerMethod = sprintf('register%sFile', ucfirst($type));
-            if(!$this->isExternalFile($url)) {
-                $url = Minifier::parseEnv($options['baseUrl'] . $url);
-            }
-
-            \Craft::$app->getView()->$registerMethod($url, $this->getRegisterOptions($options), $targetFile);
         }
 
         return $this;
@@ -155,6 +163,7 @@ class View extends Component
 
             if($doMinify) {
                 $class = Minifier::getConfig()->getClass($type);
+                /** @var CSS|JS $minifier */
                 $minifier = new $class();
 
                 foreach ($data['files'] as $filePath) {
@@ -178,6 +187,8 @@ class View extends Component
 
             unset($this->$property[$key]);
         }
+
+        return true;
     }
 
     public function targetFileIsOlder($targetFile, $files) {

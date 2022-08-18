@@ -1,5 +1,10 @@
 # Minifier Changelog
 
+## 4.0.0 - 2022-08-18
+### Changed
+- Craft CMS 4.x compatibility
+- Simpler registration of multiple files. Have a look at **[Register files](docs/register-files.md#multiple-files)**.
+
 ## 3.0.0 - 2022-08-18
 ### Changed
 - No changes to 2.0.5

@@ -11,16 +11,15 @@
 namespace bitboxde\minifier;
 
 use bitboxde\minifier\events\ViewEvent;
-use bitboxde\minifier\minify\CSS;
-use bitboxde\minifier\minify\JS;
 use bitboxde\minifier\models\Settings;
 
 use bitboxde\minifier\services\Config;
 use bitboxde\minifier\twigextensions\Extension;
-use bitboxde\minifier\twigextensions\MinifierTwigExtension;
 use Craft;
+use craft\base\Model;
 use craft\base\Plugin;
 use craft\events\TemplateEvent;
+use craft\helpers\App;
 use craft\services\Plugins;
 use craft\events\PluginEvent;
 
@@ -54,7 +53,7 @@ class Minifier extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '1.0.0';
+    public string $schemaVersion = '1.0.0';
 
     // Public Methods
     // =========================================================================
@@ -68,6 +67,7 @@ class Minifier extends Plugin
         self::$plugin = $this;
 
         Craft::$app->getView()->registerTwigExtension(new Extension());
+        Craft::$app->getView()->getTwig()->addGlobal('minifier', $this);
 
         Event::on(
             View::class,
@@ -130,7 +130,7 @@ class Minifier extends Plugin
     /**
      * @inheritdoc
      */
-    protected function createSettingsModel()
+    protected function createSettingsModel(): ?Model
     {
         return new Settings();
     }
@@ -150,7 +150,7 @@ class Minifier extends Plugin
 
     public static function parseEnv(string $str = null) {
         if(method_exists(Craft::class, 'parseEnv')) {
-            return Craft::parseEnv($str);
+            return App::parseEnv($str);
         }
 
         return Craft::getAlias($str);

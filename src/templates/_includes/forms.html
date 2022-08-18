@@ -14,7 +14,7 @@
         {% endif %}
     {% endif %}
 
-    {% if forms.autosuggest is defined or forms is defined %}
+    {% if craft.app.version > 3.0 %}
         {{ forms.field(config, forms.autosuggest(config)) }}
     {% else %}
         {{ forms.textField(config) }}

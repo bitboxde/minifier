@@ -1,13 +1,16 @@
 <?php
 namespace bitboxde\minifier\twigextensions;
 
-class HtmlMinifierNode extends \Twig_Node
+use Twig\Compiler;
+use Twig\Node\Node;
+
+class HtmlMinifierNode extends Node
 {
-    public function __construct(\Twig_Node $body, $lineno, $tag = 'minify')
+    public function __construct(Node $body, $lineno, $tag = 'minify')
     {
         parent::__construct(['body' => $body], [], $lineno, $tag);
     }
-    public function compile(\Twig_Compiler $compiler)
+    public function compile(Compiler $compiler)
     {
         $compiler
             ->addDebugInfo($this)

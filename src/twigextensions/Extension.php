@@ -3,9 +3,13 @@ namespace bitboxde\minifier\twigextensions;
 
 
 use bitboxde\minifier\Minifier;
+use Twig\Environment;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
 use voku\helper\HtmlMin;
 
-class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
+class Extension extends AbstractExtension
 {
     /**
      * @var array
@@ -35,8 +39,10 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
         $this->minifier->doRemoveWhitespaceAroundTags(true);
         $this->minifier->doRemoveEmptyAttributes(true);
         $this->minifier->doRemoveWhitespaceAroundTags(true);
+
+        $this->forceCompression = $forceCompression;
     }
-    public function minify(\Twig_Environment $twig, $html)
+    public function minify(Environment $twig, $html)
     {
         if (!$twig->isDebug() || $this->forceCompression) {
 
@@ -53,19 +59,13 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('minifyhtml', $this->callable, $this->options),
+            new TwigFunction('minifyhtml', $this->callable, $this->options),
         );
     }
     public function getFilters()
     {
         return array(
-            new \Twig_SimpleFilter('minifyhtml', $this->callable, $this->options),
+            new TwigFilter('minifyhtml', $this->callable, $this->options),
         );
-    }
-
-    public function getGlobals() {
-        return [
-            'minifier'  => Minifier::getInstance()
-        ];
     }
 }

@@ -15,7 +15,7 @@ class Config extends Component
     public $cssClass = '\MatthiasMullie\Minify\CSS';
     public $jsClass = '\MatthiasMullie\Minify\JS';
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 
